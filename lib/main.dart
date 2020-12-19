@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:muze/screens/homeScreen.dart';
-import 'package:muze/testData/song.dart';
 
 import 'controllers/allSongs.dart';
 import 'controllers/songPlayerController.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  Get.put(Songs());
   Get.put(AllSongs());
   Get.put(SongPlayerController());
+  // AllSongs.to;
+  // SongPlayerController.to;
 
   runApp(MyApp());
 }

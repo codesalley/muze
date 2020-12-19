@@ -1,11 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:muze/controllers/allSongs.dart';
 import 'package:muze/controllers/songPlayerController.dart';
 import 'package:muze/modules/song.dart';
+import 'package:muze/widgets/categoryBar.dart';
 
-import 'package:muze/testData/song.dart';
 import 'package:muze/widgets/musicCard.dart';
 import 'package:muze/widgets/nowPlayingCard.dart';
 
@@ -19,12 +20,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final allcontroller = AllSongs.to;
   final musciController = SongPlayerController.to;
-
   @override
   void initState() {
-    // getStartUp();
-    //WidgetsFlutterBinding.ensureInitialized();
-    // allcontroller.allsongs;
     super.initState();
   }
 
@@ -77,37 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ],
                       ),
                     ),
-                    Container(
-                      padding: EdgeInsets.only(
-                        right: 70,
-                        top: 10,
-                        bottom: 10,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('Songs', style: kCatergoryTextStyle),
-                          Text(
-                            'Playlists',
-                            style: kCatergoryTextStyle.copyWith(
-                              color: kInActiveColor,
-                            ),
-                          ),
-                          Text(
-                            'Artists',
-                            style: kCatergoryTextStyle.copyWith(
-                              color: kInActiveColor,
-                            ),
-                          ),
-                          Text(
-                            'Albums',
-                            style: kCatergoryTextStyle.copyWith(
-                              color: kInActiveColor,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                    CategoryBar(),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5),
                       child: Row(
@@ -128,27 +95,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         height:
                             musciController.isPlaying ? kheight * 0.72 : null,
                         alignment: Alignment.center,
-                        child: ListView.builder(
-                          itemCount: allcontroller.allsongs.length,
-                          itemBuilder: (context, int index) {
-                            List<Song> songsList = allcontroller.allsongs;
-                            return GestureDetector(
-                              onTap: () {
-                                musciController
-                                    .songPlayPauseRegulator(songsList[index]);
-                              },
-                              child: MusicCard(
-                                albumart: AssetImage('res/album.jpg'),
-
-                                artistName: songsList[index].artistName,
-                                //controller.songs.keys.elementAt(index),
-                                songTitle: songsList[index].songTitle,
-                              ),
-                            );
-                          },
+                        child: FlatButton(
+                          onPressed: () {},
+                          child: Text('Press'),
                         ),
                       ),
-                    ),
+                    )
                   ],
                 ),
               ),

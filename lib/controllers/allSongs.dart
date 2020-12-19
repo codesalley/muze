@@ -11,7 +11,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class AllSongs extends GetxController {
-  List<Song> allsongs = [];
+  List allsongs = <Song>[].obs();
 
   @override
   void onInit() async {
@@ -20,6 +20,7 @@ class AllSongs extends GetxController {
   }
   // request permission and get list of all folders
 
+  // ignore: missing_return
   Future<Void> getAllSongs() async {
     print('init');
     var status = await Permission.storage.request();
@@ -27,7 +28,7 @@ class AllSongs extends GetxController {
       List<Directory> deviceStorage = await getExternalStorageDirectories();
       List<Directory> pathToStorage = [];
       for (var dir in deviceStorage) {
-        pathToStorage.add(Directory(dir.path.split("Android")[0]));
+        pathToStorage.add(Directory(await dir.path.split("Android")[0]));
         print('Diretories captured');
       }
       List<FileSystemEntity> allFolder = await getAllFolders(pathToStorage);
@@ -35,7 +36,7 @@ class AllSongs extends GetxController {
       update();
     } else {
       print('permission denied');
-      var status = await Permission.storage.request();
+      status = await Permission.storage.request();
     }
     update();
   }

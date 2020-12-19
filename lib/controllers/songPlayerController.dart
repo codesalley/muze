@@ -1,6 +1,6 @@
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:muze/controllers/allSongs.dart';
+
 import 'package:muze/modules/song.dart';
 import 'package:get/get.dart';
 
@@ -10,14 +10,6 @@ class SongPlayerController extends GetxController {
   Song currentSong;
   int currentSongIndex = 0.obs();
   List<Song> allSongs;
-  //   final allcontroller = AllSongs.to;
-
-  // void test() {
-  //   AudioPlayer player = AudioPlayer();
-  //   var duration = player.setFilePath(
-  //       '/storage/emulated/0/Download/Made In Lagos Album/01-Wizkid-Reckless-(JustNaija.com).mp3');
-  //   player.play();
-  // }
 
   Future musicStart(Song file) async {
     if (file.path != null) {
