@@ -22,12 +22,12 @@ const KheaderTextstyle = TextStyle(
 const kArtistnameTextStyle = TextStyle(
   color: kActiveColor,
   fontFamily: 'Roboto',
-  fontSize: 16,
+  fontSize: 13,
   fontWeight: FontWeight.w500,
 );
 const kSongnameTextStyle = TextStyle(
   color: Color(0xfffbf6f0),
   fontFamily: 'Roboto',
-  fontSize: 19,
+  fontSize: 15,
   fontWeight: FontWeight.w600,
 );

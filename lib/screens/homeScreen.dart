@@ -1,14 +1,38 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:muze/controllers/allSongs.dart';
+import 'package:muze/controllers/songPlayerController.dart';
+import 'package:muze/modules/song.dart';
 
 import 'package:muze/testData/song.dart';
 import 'package:muze/widgets/musicCard.dart';
 
 import '../constants.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   final controller = Songs.to;
+
   final allcontroller = AllSongs.to;
+  final musciController = SongPlayerController.to;
+
+  @override
+  void initState() {
+    // getStartUp();
+    //WidgetsFlutterBinding.ensureInitialized();
+    allcontroller.allsongs;
+    super.initState();
+  }
+
+  // void getStartUp() async {
+  //   List<dynamic> songsList = await allcontroller.allsongs;
+
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -110,14 +134,23 @@ class HomeScreen extends StatelessWidget {
                         // height: kheight * 0.73,
                         alignment: Alignment.center,
                         child: ListView.builder(
-                          itemCount: controller.songs.length,
+                          itemCount: allcontroller.allsongs.length,
                           itemBuilder: (context, int index) {
+                            List songsList = allcontroller.allsongs;
                             return MusicCard(
                               albumart: AssetImage('res/album.jpg'),
-                              artistName:
-                                  controller.songs.keys.elementAt(index),
-                              songTitle:
-                                  controller.songs.values.elementAt(index),
+                              onpress: () {
+                                final nowplaying = songsList[index].path;
+                                musciController.currentSong = nowplaying;
+                                musciController.allSongs = songsList;
+                                musciController.songPlayPauseRegulator(
+                                    Directory(songsList[index].path));
+
+                                print('set');
+                              },
+                              artistName: songsList[index].artistName,
+                              //controller.songs.keys.elementAt(index),
+                              songTitle: songsList[index].songTitle,
                             );
                           },
                         ),
@@ -128,8 +161,10 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             GestureDetector(
-              onTap: () {
-                print(allcontroller.allsongs);
+              onTap: () async {
+                await allcontroller.getAllSongs();
+                // print(allcontroller.allsongs[1].path);
+                print('pressed');
               },
               child: Align(
                 alignment: Alignment.bottomCenter,
