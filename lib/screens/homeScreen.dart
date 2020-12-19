@@ -7,6 +7,7 @@ import 'package:muze/modules/song.dart';
 
 import 'package:muze/testData/song.dart';
 import 'package:muze/widgets/musicCard.dart';
+import 'package:muze/widgets/nowPlayingCard.dart';
 
 import '../constants.dart';
 
@@ -16,8 +17,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final controller = Songs.to;
-
   final allcontroller = AllSongs.to;
   final musciController = SongPlayerController.to;
 
@@ -25,14 +24,9 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     // getStartUp();
     //WidgetsFlutterBinding.ensureInitialized();
-    allcontroller.allsongs;
+    // allcontroller.allsongs;
     super.initState();
   }
-
-  // void getStartUp() async {
-  //   List<dynamic> songsList = await allcontroller.allsongs;
-
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -131,26 +125,25 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     Flexible(
                       child: Container(
-                        // height: kheight * 0.73,
+                        height:
+                            musciController.isPlaying ? kheight * 0.72 : null,
                         alignment: Alignment.center,
                         child: ListView.builder(
                           itemCount: allcontroller.allsongs.length,
                           itemBuilder: (context, int index) {
-                            List songsList = allcontroller.allsongs;
-                            return MusicCard(
-                              albumart: AssetImage('res/album.jpg'),
-                              onpress: () {
-                                final nowplaying = songsList[index].path;
-                                musciController.currentSong = nowplaying;
-                                musciController.allSongs = songsList;
-                                musciController.songPlayPauseRegulator(
-                                    Directory(songsList[index].path));
-
-                                print('set');
+                            List<Song> songsList = allcontroller.allsongs;
+                            return GestureDetector(
+                              onTap: () {
+                                musciController
+                                    .songPlayPauseRegulator(songsList[index]);
                               },
-                              artistName: songsList[index].artistName,
-                              //controller.songs.keys.elementAt(index),
-                              songTitle: songsList[index].songTitle,
+                              child: MusicCard(
+                                albumart: AssetImage('res/album.jpg'),
+
+                                artistName: songsList[index].artistName,
+                                //controller.songs.keys.elementAt(index),
+                                songTitle: songsList[index].songTitle,
+                              ),
                             );
                           },
                         ),
@@ -160,67 +153,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-            GestureDetector(
-              onTap: () async {
-                await allcontroller.getAllSongs();
-                // print(allcontroller.allsongs[1].path);
-                print('pressed');
-              },
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(25),
-                      topRight: Radius.circular(25),
-                    ),
-                    color: KbackgroundColor,
-                    border: Border.all(
-                      color: Colors.black.withOpacity(0.6),
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black54,
-                        offset: Offset(
-                          5,
-                          -5,
-                        ),
-                        spreadRadius: 1,
-                        blurRadius: 20,
-                      ),
-                    ],
-                  ),
-                  height: 70,
-                  alignment: Alignment.center,
-                  child: ListTile(
-                    contentPadding: EdgeInsets.only(
-                      left: 10,
-                      top: 2,
-                      right: 20,
-                    ),
-                    leading: Container(
-                      width: 70,
-                      child: Icon(
-                        Icons.equalizer,
-                        color: Colors.redAccent,
-                      ),
-                    ),
-                    title: Text(
-                      'Bana',
-                      style: kSongnameTextStyle,
-                    ),
-                    subtitle: Text(
-                      'Sapashini',
-                      style: kArtistnameTextStyle,
-                    ),
-                    trailing: Container(
-                      child: Icon(
-                        Icons.pause,
-                        color: Colors.redAccent,
-                      ),
-                    ),
-                  ),
-                ),
+            Visibility(
+              visible: musciController.isPlaying,
+              child: GestureDetector(
+                onTap: () async {
+                  await allcontroller.getAllSongs();
+                  // print(allcontroller.allsongs[1].path);
+                  print('pressed');
+                },
+                child: NowPlayingCard(),
               ),
             ),
           ],

@@ -11,7 +11,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class AllSongs extends GetxController {
-  List<dynamic> allsongs = [].obs();
+  List<Song> allsongs = [];
 
   @override
   void onInit() async {

@@ -5,35 +5,59 @@ import 'package:muze/modules/song.dart';
 import 'package:get/get.dart';
 
 class SongPlayerController extends GetxController {
-  AudioPlayer audioplayer;
+  AudioPlayer player;
   bool isPlaying = false.obs();
-  var currentSong;
+  Song currentSong;
   int currentSongIndex = 0.obs();
-  List allSongs;
+  List<Song> allSongs;
+  //   final allcontroller = AllSongs.to;
 
-  void musicStart(var song) {
-    if (song != null) {
-      currentSong = song.obs();
-      currentSongIndex =
-          allSongs.indexWhere((element) => element.path == currentSong.path);
-      audioplayer = AudioPlayer();
-      audioplayer.setFilePath(currentSong.path);
+  // void test() {
+  //   AudioPlayer player = AudioPlayer();
+  //   var duration = player.setFilePath(
+  //       '/storage/emulated/0/Download/Made In Lagos Album/01-Wizkid-Reckless-(JustNaija.com).mp3');
+  //   player.play();
+  // }
+
+  Future musicStart(Song file) async {
+    if (file.path != null) {
+      currentSong = file;
+      player = AudioPlayer();
+      var duration = player.setFilePath(currentSong.path);
+
       play();
-      update();
+      // currentSong = file;
+      // print(currentSong.path);
+      // print('path from music start');
     }
   }
 
-  void songPlayPauseRegulator(var song) async {
-    if (currentSong.path == null) {
+  void songPlayPauseRegulator(Song song) async {
+    // final player = AudioPlayer();
+    if (currentSong?.path == null) {
       await musicStart(song);
+
       setIsPlaying(true);
     } else if (currentSong.path == song.path) {
       isPlaying ? pause() : play();
+      print('null path : ${currentSong.path}');
     } else if (currentSong.path != song.path) {
-      audioplayer.dispose();
+      player.dispose();
       await musicStart(song);
       setIsPlaying(true);
     }
+    update();
+  }
+
+  Future<void> disposePlayer() async {
+    try {
+      await player.dispose();
+    } catch (e) {
+      print(e);
+    }
+    setIsPlaying(false);
+
+    update();
   }
 
   void setIsPlaying(bool val) {
@@ -43,12 +67,12 @@ class SongPlayerController extends GetxController {
 
   Future<void> play() async {
     setIsPlaying(true);
-    audioplayer.play();
+    player.play();
   }
 
   Future<void> pause() async {
     setIsPlaying(false);
-    audioplayer.pause();
+    player.pause();
   }
 
   static SongPlayerController get to => Get.find<SongPlayerController>();
