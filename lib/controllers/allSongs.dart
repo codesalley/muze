@@ -1,45 +1,61 @@
-import 'dart:ffi';
-
 import 'dart:io';
 
 import 'package:audiotagger/audiotagger.dart';
 import 'package:get/get.dart';
 import 'package:muze/modules/song.dart';
-
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
+
 import 'package:permission_handler/permission_handler.dart';
 
 class AllSongs extends GetxController {
-  List allsongs = <Song>[].obs();
+  var allsongs = List<Song>().obs();
 
   @override
   void onInit() async {
-    await getAllSongs();
     super.onInit();
+    getAllSongs();
   }
-  // request permission and get list of all folders
 
-  // ignore: missing_return
-  Future<Void> getAllSongs() async {
-    print('init');
+  Future<void> getAllSongs() async {
     var status = await Permission.storage.request();
     if (status.isGranted) {
       List<Directory> deviceStorage = await getExternalStorageDirectories();
       List<Directory> pathToStorage = [];
       for (var dir in deviceStorage) {
-        pathToStorage.add(Directory(await dir.path.split("Android")[0]));
-        print('Diretories captured');
+        pathToStorage.add(Directory(dir.path.split("Android")[0]));
       }
-      List<FileSystemEntity> allFolder = await getAllFolders(pathToStorage);
-      await searchFolder(allFolder);
-      update();
+      List<FileSystemEntity> allFolders = await getAllFolders(pathToStorage);
+      return await searchFolder(allFolders);
     } else {
       print('permission denied');
       status = await Permission.storage.request();
     }
-    update();
   }
+
+//   // request permission and get list of all folders
+
+//   // ignore: missing_return
+//   Future<Void> getAllSongs() async {
+//     print('init');
+//     var status = await Permission.storage.request();
+//     if (status.isGranted) {
+//       List<Directory> deviceStorage = await getExternalStorageDirectories();
+//       List<Directory> pathToStorage = [];
+//       for (var dir in deviceStorage) {
+//         // ignore: await_only_futures
+//         pathToStorage.add(Directory(await dir.path.split("Android")[0]));
+//         print('Diretories captured');
+//       }
+//       List<FileSystemEntity> allFolder = await getAllFolders(pathToStorage);
+//       await searchFolder(allFolder);
+//       update();
+//     } else {
+//       print('permission denied');
+//       status = await Permission.storage.request();
+//     }
+//     update();
+//   }
 
   //search every file in folders for files ending with mp3
   Future<void> getAllFiles(String path) async {
@@ -57,7 +73,7 @@ class AllSongs extends GetxController {
     }
   }
 
-  //searches all the folders recursivly for mp3
+//   //searches all the folders recursivly for mp3
 
   Future<void> searchFolder(List folders) async {
     for (FileSystemEntity file in folders) {
@@ -71,7 +87,7 @@ class AllSongs extends GetxController {
     }
   }
 
-  // getting folder list
+//   // getting folder list
 
   Future<List<FileSystemEntity>> getAllFolders(List path) async {
     List<FileSystemEntity> allFolders = [];
@@ -82,7 +98,7 @@ class AllSongs extends GetxController {
     return allFolders;
   }
 
-//gets song destails using audio tagger
+// //gets song destails using audio tagger
   Future<Song> getsongdetails(String file) async {
     var audiotagger = Audiotagger();
 

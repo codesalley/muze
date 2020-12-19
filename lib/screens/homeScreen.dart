@@ -1,29 +1,13 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:muze/controllers/allSongs.dart';
-import 'package:muze/controllers/songPlayerController.dart';
-import 'package:muze/modules/song.dart';
-import 'package:muze/widgets/categoryBar.dart';
 
-import 'package:muze/widgets/musicCard.dart';
-import 'package:muze/widgets/nowPlayingCard.dart';
+import 'package:muze/controllers/allSongs.dart';
+
+import 'package:muze/widgets/categoryBar.dart';
 
 import '../constants.dart';
 
-class HomeScreen extends StatefulWidget {
-  @override
-  _HomeScreenState createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  final allcontroller = AllSongs.to;
-  final musciController = SongPlayerController.to;
-  @override
-  void initState() {
-    super.initState();
-  }
+class HomeScreen extends StatelessWidget {
+  final songController = AllSongs.to;
 
   @override
   Widget build(BuildContext context) {
@@ -91,29 +75,15 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     Flexible(
-                      child: Container(
-                        height:
-                            musciController.isPlaying ? kheight * 0.72 : null,
-                        alignment: Alignment.center,
-                        child: FlatButton(
-                          onPressed: () {},
-                          child: Text('Press'),
-                        ),
+                      child: ListView.builder(
+                        itemCount: songController.allsongs.length,
+                        itemBuilder: (context, int index) {
+                          return Text('hello $index');
+                        },
                       ),
-                    )
+                    ),
                   ],
                 ),
-              ),
-            ),
-            Visibility(
-              visible: musciController.isPlaying,
-              child: GestureDetector(
-                onTap: () async {
-                  await allcontroller.getAllSongs();
-                  // print(allcontroller.allsongs[1].path);
-                  print('pressed');
-                },
-                child: NowPlayingCard(),
               ),
             ),
           ],
