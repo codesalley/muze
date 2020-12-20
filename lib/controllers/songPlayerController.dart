@@ -7,6 +7,9 @@ import 'package:get/get.dart';
 class SongPlayerController extends GetxController {
   AudioPlayer player;
   bool isPlaying = false.obs();
+  bool isFavorite = false.obs();
+  bool isShuffle = false.obs();
+  bool isRepeat = false.obs();
   Song currentSong;
   int currentSongIndex = 0.obs();
   List<Song> allSongs;

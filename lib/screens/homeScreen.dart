@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'package:muze/controllers/allSongs.dart';
+import 'package:muze/controllers/songPlayerController.dart';
+import 'package:muze/modules/song.dart';
+import 'package:muze/screens/nowPlayingScreen.dart';
 
 import 'package:muze/widgets/categoryBar.dart';
+import 'package:muze/widgets/musicCard.dart';
 
 import '../constants.dart';
 
 class HomeScreen extends StatelessWidget {
   final songController = AllSongs.to;
+  final songPlayerController = SongPlayerController.to;
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +84,22 @@ class HomeScreen extends StatelessWidget {
                       child: ListView.builder(
                         itemCount: songController.allsongs.length,
                         itemBuilder: (context, int index) {
-                          return Text('hello $index');
+                          return MusicCard(
+                            onpress: () {
+                              songPlayerController.songPlayPauseRegulator(
+                                songController.allsongs[index],
+                              );
+                              Get.to(NowPlaying(
+                                songController.allsongs[index],
+                              ));
+                            },
+                            songTitle: songController.allsongs[index].songTitle,
+                            albumart: AssetImage(
+                              'res/album.jpg',
+                            ),
+                            artistName:
+                                songController.allsongs[index].artistName,
+                          );
                         },
                       ),
                     ),
