@@ -16,6 +16,8 @@ class CustomButton extends StatelessWidget {
   final Function onpress;
   final bool isToggled;
 
+  //bool isSwitched = false;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -24,11 +26,17 @@ class CustomButton extends StatelessWidget {
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           border: Border.all(
-            width: 5,
+            width: 4,
             color: Theme.of(context).backgroundColor.withOpacity(0.5),
           ),
           color: Theme.of(context).scaffoldBackgroundColor,
           boxShadow: [
+            BoxShadow(
+              color: Theme.of(context).backgroundColor,
+              offset: Offset(-15, -15),
+              blurRadius: 28,
+              spreadRadius: 1,
+            ),
             BoxShadow(
               color: Theme.of(context).splashColor,
               offset: Offset(15, 15),
@@ -36,23 +44,17 @@ class CustomButton extends StatelessWidget {
               spreadRadius: 1,
             ),
             BoxShadow(
-              color: Theme.of(context).backgroundColor,
-              offset: Offset(-15, -15),
-              blurRadius: 28,
+              color: Theme.of(context).splashColor.withOpacity(0.6),
+              offset: Offset(6, 6),
+              blurRadius: 10,
               spreadRadius: 1,
             ),
-            // BoxShadow(
-            //   color: Theme.of(context).splashColor.withOpacity(0.6),
-            //   offset: Offset(6, 6),
-            //   blurRadius: 10,
-            //   spreadRadius: 1,
-            // ),
-            // BoxShadow(
-            //   color: Theme.of(context).backgroundColor.withOpacity(0.3),
-            //   offset: Offset(-6, -6),
-            //   blurRadius: 10,
-            //   spreadRadius: 1,
-            // ),
+            BoxShadow(
+              color: Theme.of(context).backgroundColor.withOpacity(0.3),
+              offset: Offset(-6, -6),
+              blurRadius: 10,
+              spreadRadius: 1,
+            ),
           ],
           gradient: isToggled
               ? LinearGradient(
@@ -71,7 +73,7 @@ class CustomButton extends StatelessWidget {
                   ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  stops: [0, 1],
+                  stops: [0, 4],
                 ),
         ),
         width: width / size,
@@ -79,7 +81,7 @@ class CustomButton extends StatelessWidget {
         child: Icon(
           iconData,
           // Icons.pause_outlined,
-          color: Color(0xFFD71D1D),
+          color: isToggled ? Color(0xFFD71D1D) : Colors.white.withOpacity(0.7),
         ),
       ),
     );

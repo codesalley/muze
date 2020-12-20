@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:muze/constants.dart';
 import 'package:muze/controllers/songPlayerController.dart';
 import 'package:muze/modules/song.dart';
 import 'package:muze/widgets/customButton.dart';
 
 class NowPlaying extends StatelessWidget {
-  final songPlayerController = SongPlayerController.to;
   Song song;
   NowPlaying(this.song);
+
+  final songPlayerController = SongPlayerController.to;
+
+  bool isPressed = false;
+
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
@@ -23,20 +28,29 @@ class NowPlaying extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Icon(
-                  Icons.navigate_before_outlined,
-                  color: Colors.white70,
+                GestureDetector(
+                  onTap: () => Navigator.pop(context),
+                  child: Icon(
+                    Icons.navigate_before_outlined,
+                    color: Colors.white70,
+                    size: 30,
+                  ),
                 ),
-                Text('Now Playing'),
+                Text(
+                  'Now Playing',
+                  style: KheaderTextstyle,
+                ),
                 Row(
                   children: [
                     Icon(
                       Icons.playlist_play_outlined,
                       color: Colors.white70,
+                      size: 30,
                     ),
                     Icon(
                       Icons.more_vert_outlined,
                       color: Colors.white70,
+                      size: 30,
                     ),
                   ],
                 )
@@ -62,7 +76,7 @@ class NowPlaying extends StatelessWidget {
               height: height / 15,
             ),
             Text(
-              'Bana',
+              '${song.songTitle}',
               style: kSongnameTextStyle.copyWith(
                 fontSize: 27,
                 fontWeight: FontWeight.w500,
@@ -70,7 +84,7 @@ class NowPlaying extends StatelessWidget {
               ),
             ),
             Text(
-              'Sapashini',
+              '${song.artistName}',
               style: kArtistnameTextStyle.copyWith(
                 fontSize: 20,
                 color: Colors.white60,
@@ -90,8 +104,14 @@ class NowPlaying extends StatelessWidget {
                 CustomButton(
                   width: width,
                   size: 5,
-                  iconData: Icons.pause_outlined,
+                  iconData: songPlayerController.isPlaying
+                      ? Icons.pause_outlined
+                      : Icons.play_arrow_outlined,
                   isToggled: songPlayerController.isPlaying,
+                  onpress: () {
+                    songPlayerController.isPlaying =
+                        !songPlayerController.isPlaying;
+                  },
                 ),
                 Icon(
                   Icons.fast_forward_rounded,
@@ -109,18 +129,30 @@ class NowPlaying extends StatelessWidget {
                     iconData: Icons.favorite,
                     size: 6,
                     isToggled: songPlayerController.isFavorite,
+                    onpress: () {
+                      songPlayerController.isFavorite =
+                          !songPlayerController.isFavorite;
+                    },
                   ),
                   CustomButton(
                     width: width,
                     iconData: Icons.shuffle,
                     size: 6,
                     isToggled: songPlayerController.isShuffle,
+                    onpress: () {
+                      songPlayerController.isShuffle =
+                          !songPlayerController.isShuffle;
+                    },
                   ),
                   CustomButton(
                     width: width,
                     iconData: Icons.repeat,
                     size: 6,
-                    isToggled: songPlayerController.isPlaying,
+                    isToggled: songPlayerController.isRepeat,
+                    onpress: () {
+                      songPlayerController.isRepeat =
+                          !songPlayerController.isRepeat;
+                    },
                   ),
                 ],
               ),

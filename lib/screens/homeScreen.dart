@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 
 import 'package:muze/controllers/allSongs.dart';
 import 'package:muze/controllers/songPlayerController.dart';
-import 'package:muze/modules/song.dart';
+
 import 'package:muze/screens/nowPlayingScreen.dart';
 
 import 'package:muze/widgets/categoryBar.dart';

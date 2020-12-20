@@ -6,13 +6,24 @@ import 'package:get/get.dart';
 
 class SongPlayerController extends GetxController {
   AudioPlayer player;
-  bool isPlaying = false.obs();
-  bool isFavorite = false.obs();
-  bool isShuffle = false.obs();
-  bool isRepeat = false.obs();
+  var isPlaying = false.obs();
+  var isFavorite = false.obs();
+  var isShuffle = false.obs();
+  var isRepeat = false.obs();
   Song currentSong;
   int currentSongIndex = 0.obs();
   List<Song> allSongs;
+
+  bool toggled(bool value) {
+    if (value != true) {
+      print('true block: $value');
+      return value = true.obs();
+    } else {
+      print('false block: $value');
+      return value = false.obs();
+    }
+    update();
+  }
 
   Future musicStart(Song file) async {
     if (file.path != null) {
@@ -33,13 +44,16 @@ class SongPlayerController extends GetxController {
       await musicStart(song);
 
       setIsPlaying(true);
+      update();
     } else if (currentSong.path == song.path) {
       isPlaying ? pause() : play();
-      print('null path : ${currentSong.path}');
+
+      update();
     } else if (currentSong.path != song.path) {
-      player.dispose();
+      disposePlayer();
       await musicStart(song);
       setIsPlaying(true);
+      update();
     }
     update();
   }
@@ -63,11 +77,13 @@ class SongPlayerController extends GetxController {
   Future<void> play() async {
     setIsPlaying(true);
     player.play();
+    update();
   }
 
   Future<void> pause() async {
     setIsPlaying(false);
     player.pause();
+    update();
   }
 
   static SongPlayerController get to => Get.find<SongPlayerController>();
