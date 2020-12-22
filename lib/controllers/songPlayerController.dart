@@ -1,8 +1,10 @@
+import 'dart:core';
+
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:just_audio/just_audio.dart';
 
-import 'package:muze/modules/song.dart';
 import 'package:get/get.dart';
+import 'package:muze/models/song.dart';
 
 class SongPlayerController extends GetxController {
   AudioPlayer player;
@@ -11,73 +13,62 @@ class SongPlayerController extends GetxController {
   var isShuffle = false.obs();
   var isRepeat = false.obs();
   Song currentSong;
-  int currentSongIndex = 0.obs();
-  List<Song> allSongs;
+  var currentSongIndex = 0.obs();
+  List<Song> allSongs = [].obs();
 
-  bool toggled(bool value) {
-    if (value != true) {
-      print('true block: $value');
-      return value = true.obs();
-    } else {
-      print('false block: $value');
-      return value = false.obs();
-    }
-    update();
-  }
-
-  Future musicStart(Song file) async {
-    if (file.path != null) {
-      currentSong = file;
+  Future musicStart(Song song) async {
+    // print(file.path);
+    if (song.path != null) {
+      currentSong = song;
       player = AudioPlayer();
-      var duration = player.setFilePath(currentSong.path);
+      currentSongIndex =
+          allSongs.indexWhere((element) => element.path == currentSong.path);
+      var duration = player.setFilePath(song.path);
 
       play();
-      // currentSong = file;
-      // print(currentSong.path);
-      // print('path from music start');
+      update();
     }
   }
 
-  void songPlayPauseRegulator(Song song) async {
+  void songPlayPauseRegulator(Song playList) async {
     // final player = AudioPlayer();
-    if (currentSong?.path == null) {
-      await musicStart(song);
+    if (currentSong.path == null) {
+      await musicStart(playList);
 
       setIsPlaying(true);
-      update();
-    } else if (currentSong.path == song.path) {
+    } else if (currentSong.path == playList.path) {
       isPlaying ? pause() : play();
-
-      update();
-    } else if (currentSong.path != song.path) {
+    } else if (currentSong.path != playList.path) {
       disposePlayer();
-      await musicStart(song);
+      await musicStart(playList);
       setIsPlaying(true);
-      update();
     }
     update();
   }
+
+  void playPause(Song song) {
+    player.playerStateStream.listen((state) {});
+  }
+
+  void playerSequence() {}
 
   Future<void> disposePlayer() async {
     try {
       await player.dispose();
+      update();
     } catch (e) {
       print(e);
     }
     setIsPlaying(false);
-
-    update();
   }
 
   void setIsPlaying(bool val) {
     isPlaying = val;
-    update();
   }
 
   Future<void> play() async {
     setIsPlaying(true);
     player.play();
-    update();
   }
 
   Future<void> pause() async {
@@ -85,6 +76,4 @@ class SongPlayerController extends GetxController {
     player.pause();
     update();
   }
-
-  static SongPlayerController get to => Get.find<SongPlayerController>();
 }

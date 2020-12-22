@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class CustomButton extends StatelessWidget {
+class CustomButton extends StatefulWidget {
   CustomButton(
       {Key key,
       @required this.width,
@@ -16,12 +16,15 @@ class CustomButton extends StatelessWidget {
   final Function onpress;
   final bool isToggled;
 
-  //bool isSwitched = false;
+  @override
+  _CustomButtonState createState() => _CustomButtonState();
+}
 
+class _CustomButtonState extends State<CustomButton> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onpress,
+      onTap: widget.onpress,
       child: Container(
         decoration: BoxDecoration(
           shape: BoxShape.circle,
@@ -56,7 +59,7 @@ class CustomButton extends StatelessWidget {
               spreadRadius: 1,
             ),
           ],
-          gradient: isToggled
+          gradient: widget.isToggled
               ? LinearGradient(
                   colors: [
                     Theme.of(context).splashColor,
@@ -76,12 +79,14 @@ class CustomButton extends StatelessWidget {
                   stops: [0, 4],
                 ),
         ),
-        width: width / size,
-        height: width / size,
+        width: widget.width / widget.size,
+        height: widget.width / widget.size,
         child: Icon(
-          iconData,
+          widget.iconData,
           // Icons.pause_outlined,
-          color: isToggled ? Color(0xFFD71D1D) : Colors.white.withOpacity(0.7),
+          color: widget.isToggled
+              ? Color(0xFFD71D1D)
+              : Colors.white.withOpacity(0.7),
         ),
       ),
     );

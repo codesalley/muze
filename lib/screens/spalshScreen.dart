@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:muze/controllers/allSongs.dart';
+import 'package:muze/controllers/allSongsController.dart';
 import 'package:muze/controllers/songPlayerController.dart';
 import 'package:muze/screens/homeScreen.dart';
 
 class SplashScreen extends StatefulWidget {
+  static String splashScreen = 'splash';
+
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
@@ -14,19 +16,18 @@ class _SplashScreenState extends State<SplashScreen>
   AnimationController animationcontroller;
   CurvedAnimation curvedAnimation;
   Animation animation;
+  final controller = Get.find<AllSongs>();
+  final musicController = Get.find<SongPlayerController>();
 
   @override
   void initState() {
     animationcontroller = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 5),
+      duration: Duration(seconds: 2),
       upperBound: 1.0,
-    )..addListener(() {
+    )..addListener(() async {
         if (animationcontroller.isCompleted) {
-          final songController = AllSongs.to;
-          SongPlayerController.to;
-          songController.getAllSongs();
-
+          musicController.allSongs = await controller.allsongs;
           Get.to(HomeScreen());
         }
       });

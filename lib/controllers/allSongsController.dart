@@ -2,19 +2,21 @@ import 'dart:io';
 
 import 'package:audiotagger/audiotagger.dart';
 import 'package:get/get.dart';
-import 'package:muze/modules/song.dart';
+import 'package:get/get_state_manager/src/simple/list_notifier.dart';
+import 'package:muze/models/song.dart';
+
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'package:permission_handler/permission_handler.dart';
 
 class AllSongs extends GetxController {
-  var allsongs = List<Song>().obs();
+  List<Song> allsongs = [].obs();
 
   @override
   void onInit() async {
     super.onInit();
-    getAllSongs();
+    await getAllSongs();
   }
 
   Future<void> getAllSongs() async {
@@ -110,6 +112,4 @@ class AllSongs extends GetxController {
     }
     return Song.fromMap(audioInfo, filePath: file);
   }
-
-  static AllSongs get to => Get.find<AllSongs>();
 }
